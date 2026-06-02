@@ -79,7 +79,7 @@ function Dashboard({ user, setUser, handleLogout, fetchCurrentUser }) {
   return (
     <div className="container">
       <div className="dashboard-card">
-        <h1>SecureBank Dashboard</h1>
+        <h1>SSecureBank Dashboard</h1>
 	<p className="welcome">
   Welcome back, <strong>{user.username}</strong>
 </p>
