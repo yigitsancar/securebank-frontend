@@ -17,6 +17,10 @@ function Dashboard({ user, setUser, handleLogout, fetchCurrentUser }) {
   const [transactions, setTransactions] = useState([]);
   const [showTransactions, setShowTransactions] = useState(false);
 
+  const [adminUsers, setAdminUsers] = useState([]);
+  const [adminTransactions, setAdminTransactions] = useState([]);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+
   const handleDeposit = async () => {
     try {
       await api.post("/api/banking/deposit", {
@@ -75,6 +79,20 @@ function Dashboard({ user, setUser, handleLogout, fetchCurrentUser }) {
       setMessage("Transactions could not be loaded!");
     }
   };
+  const handleAdminPanel = async () => {
+  try {
+    const usersResponse = await api.get("/api/admin/users");
+    const transactionsResponse = await api.get("/api/admin/transactions");
+
+    setAdminUsers(usersResponse.data);
+    setAdminTransactions(transactionsResponse.data);
+    setShowAdminPanel(true);
+    setMessage("");
+  } catch (error) {
+    setMessage("Admin data could not be loaded!");
+  }
+};
+
 
   return (
     <div className="container">
@@ -121,6 +139,12 @@ function Dashboard({ user, setUser, handleLogout, fetchCurrentUser }) {
 
           <button onClick={handleTransactions}>Transactions</button>
         </div>
+
+{user.role === "ADMIN" && (
+  <button className="admin-btn" onClick={handleAdminPanel}>
+    Admin Panel
+  </button>
+)}
 
         {showDepositForm && (
   <div className="modal-overlay">
@@ -256,6 +280,44 @@ function Dashboard({ user, setUser, handleLogout, fetchCurrentUser }) {
     </div>
   </div>
 )}
+
+{showAdminPanel && (
+  <div className="modal-overlay">
+    <div className="modal admin-modal">
+      <h2>Admin Panel</h2>
+      <p>Manage users and monitor all transactions.</p>
+
+      <h3>Users</h3>
+      <div className="admin-section">
+        {adminUsers.map((adminUser) => (
+          <div className="admin-item" key={adminUser.id}>
+            <strong>{adminUser.username}</strong>
+            <span>{adminUser.email}</span>
+            <small>{adminUser.role}</small>
+          </div>
+        ))}
+      </div>
+
+      <h3>All Transactions</h3>
+      <div className="admin-section">
+        {adminTransactions.map((transaction) => (
+          <div className="admin-item" key={transaction.id}>
+            <strong>{transaction.type}</strong>
+            <span>
+              {transaction.username} - {transaction.amount} ₺
+            </span>
+            <small>{transaction.description}</small>
+          </div>
+        ))}
+      </div>
+
+      <button className="cancel-btn" onClick={() => setShowAdminPanel(false)}>
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
         {message && <p className="message">{message}</p>}
 
         <button className="logout-btn" onClick={handleLogout}>
