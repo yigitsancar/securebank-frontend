@@ -37,3 +37,8 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           script: |
             ./frontend-deploy.sh
+
+            export KUBECONFIG=$HOME/.kube/config
+
+            kubectl rollout restart deployment/securebank-frontend -n securebank
+            kubectl rollout status deployment/securebank-frontend -n securebank
