@@ -85,7 +85,7 @@ function App() {
    const authPage = (
     <div className="container">
       <div className="card">
-        <h1>🏦 SecureBank</h1>
+        <h1>SecureBank</h1>
         <p>Modern Banking Platform</p>
 
         <div className="form">
