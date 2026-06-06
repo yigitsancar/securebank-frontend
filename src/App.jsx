@@ -86,7 +86,7 @@ function App() {
     <div className="container">
       <div className="card">
         <h1>SecureBank</h1>
-        <p> Modern Banking Platform</p>
+        <p>Modern Banking Platform</p>
 
         <div className="form">
           <input
